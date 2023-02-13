@@ -3,12 +3,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage} from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
-/*
-import serviceAccount from "./casssandra-bot-firebase.json";
-const app = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-*/
 
 const firebaseConfig = {
     apiKey: "AIzaSyBPq47m4icGB0rO7qbb6gW8YY1vC5_q1fA",
