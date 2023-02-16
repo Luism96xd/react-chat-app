@@ -16,37 +16,8 @@ const Input = () => {
   const [error, setError] = useState(false);
 
   const handleSend = async () => {
-    if (img){
-      const storageRef = ref(storage, "attachments/" + Timestamp.now());
-
-      const uploadTask = uploadBytesResumable(storageRef, img);
-
-      uploadTask.on(
-        //Manejar errores
-        (error) => {
-          setError(true);
-          console.log(error);
-        }, 
-        //Carga exitosa
-        () => {
-          // Upload completed successfully, now we can get the download URL
-          getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
-            console.log('File available at', downloadURL);
-            await updateDoc(doc(db, "chats", data.chatId), {
-              messages: arrayUnion({
-                id: uuidv4(),
-                text: text,
-                senderId: currentUser.uid,
-                date: Timestamp.now(),
-                img: downloadURL
-              })
-            });
-          });
-        
-        }
-
-      );//EndOn
-
+    if (img){ 
+      handleImage(img);
     }else{
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -57,7 +28,6 @@ const Input = () => {
         })
       });
     }
-
     //Actualizar mi último mensaje enviado
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId+".lastMessage"]: {
@@ -77,6 +47,38 @@ const Input = () => {
     setImg(null);
   }
 
+  const handleImage = (img) =>{
+    const storageRef = ref(storage, "attachments/" + Timestamp.now());
+
+    const uploadTask = uploadBytesResumable(storageRef, img);
+
+    uploadTask.on(
+      //Manejar errores
+      (error) => {
+        setError(true);
+        console.log(error);
+      }, 
+      //Carga exitosa
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+          console.log('File available at', downloadURL);
+          await updateDoc(doc(db, "chats", data.chatId), {
+            messages: arrayUnion({
+              id: uuidv4(),
+              text: text,
+              senderId: currentUser.uid,
+              date: Timestamp.now(),
+              img: downloadURL
+            })
+          });
+        });
+      
+      }
+
+    );//EndOn
+  }
+
   const handleKey = (e) =>{
     if (e.code === "Enter"){
       console.log("enter");
@@ -93,7 +95,11 @@ const Input = () => {
           onKeyDown={handleKey}
         />
         <div className="send">
-            <img src={Img} alt="" />
+            <img 
+                src={Img} 
+                alt=""
+                onChange={e => setImg(e.target.files[0])}
+            />
             <input 
                 type="file" 
                 name="" id="file" 
