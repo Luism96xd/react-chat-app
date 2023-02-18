@@ -1,0 +1,21 @@
+.ripple-effect{
+    background-color: white;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    
+    animation: ripples 1s linear infinite;
+  }
+  
+  @keyframes ripples{
+    from{
+      width: 0;
+      height: 0;
+      opacity: 0.5;
+    }
+    to{
+      width: 500px;
+      height: 500px;
+      opacity: 0;
+    }
+  }

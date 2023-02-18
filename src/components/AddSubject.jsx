@@ -68,7 +68,7 @@ export const AddSubject = ({id, setIsOpen}) => {
         }catch (error) {
             console.error(error.message);
         }
-
+        setIsOpen(false)
         /*
         try{
             const res = await addDoc(collection(db, "topicos"), { 

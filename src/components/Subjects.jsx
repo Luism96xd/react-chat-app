@@ -79,7 +79,7 @@ const Subjects = () =>{
                 <button className="btn btn-default" onClick={handleCreate}>Agregar Nuevo</button>
             </div>
             {isOpen && 
-                <Modal title={(data.subject.id_subject)? data.name : "Agregar nuevo Tópico"}>
+                <Modal title={(data.subject.id_subject)? data.subject.name : "Agregar nuevo Tópico"}>
                     <AddSubject id={data.subject.id_subject} setIsOpen={setIsOpen}/>
                 </Modal>
             }

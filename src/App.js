@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AdminPanel from './pages/AdminPanel';
+import Chat from './pages/IAChat';
 
 import {
   BrowserRouter as Router,
@@ -38,6 +39,7 @@ function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/admin" element={<AdminPanel/>} />
+          <Route path="/chat" element={<Chat/>} />
         </Routes>
       </Router>
     </div>
