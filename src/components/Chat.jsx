@@ -1,5 +1,5 @@
 import Camera from '../img/cam.png';
-import Add from '../img/add.png';
+import Add from '../img/addUser.png';
 import More from '../img/more.png';
 import Messages from "./Messages";
 import Input from "./Input";

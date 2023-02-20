@@ -1,41 +1,37 @@
 import { doc, serverTimestamp, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
 import "../components/_ripples.scss";
-import createRipples from "../ripples";
 import { SubjectContext } from '../context/SubjectContext';
 import { db } from '../firebase';
 import axios from 'axios';
 
 const TextArea = ({ subject }) => {
   const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
   const [loading, setLoading] = useState("");
 
-  //const { data } = useContext(SubjectContext);
+  const BASE_URL = "https://virtual-assistant.onrender.com";
+  const { data } = useContext(SubjectContext);
+  const { id_subject, name } = data.subject;
 
-  /*
   useEffect(() => {
-    const getData = async () =>{
+    const getData = async () => {
       setLoading(true);
-      if (data.subject.id_subject !== undefined){
+      if (id_subject !== null && id_subject !== undefined) {
         try {
-          const response = await axios.get(
-            'https://virtual-assistant.onrender.com/subjects/'+ data.subject.id_subject + "/descriptions/"
-          );
-          setContent(response.data[0]?.context);
+          const response = await axios.get(BASE_URL + "/subjects/" + id_subject + "/descriptions/");
+          const description = (response.data[0]) ? response.data[0].context : "";
+          setContent(description);
         } catch (error) {
           console.error(error.message);
         }
         setLoading(false);
       }
     }
-    return () => {
-        getData();
-    }
-}, [data.subject])
-*/
+    getData();
+  }, [id_subject])
 
 
+  /*
   useEffect(() => {
     const getData = async () => {
       //let id = subject.id_subject;
@@ -61,8 +57,29 @@ const TextArea = ({ subject }) => {
       getData();
     }
   }, [subject.name]);
+  */
 
   const handleSend = async () => {
+    if (id_subject !== null && id_subject !== undefined) {
+      const endpoint = BASE_URL + "/subjects/" + id_subject + "/descriptions/";
+      try {
+        const response = await axios.get(endpoint);
+        if(response.data[0]){
+          let response = await axios.put(endpoint, {
+            context: content
+          });
+          console.log("PUT: ", response);
+        }else{
+          let response = await axios.post(endpoint, {
+            context: content
+          });
+          console.log("POST: ", response);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    /*
     const id = subject.id_subject.toString();
     const name = subject.name.toLowerCase().replace(" ", "-");
     await setDoc(doc(db, "contextos", name), {
@@ -70,17 +87,23 @@ const TextArea = ({ subject }) => {
       contexto: content,
       lastModified: serverTimestamp()
     });
+    */
   }
 
   return (
     <div className='workspace'>
-      <h1>{(subject) ? subject.name : "Configurar respuestas"}</h1>
-      <form action="">
-        <textarea onChange={e => setContent(e.target.value)} cols="40" rows="10" defaultValue={content}></textarea>
-      </form>
-      <div>
-        <button onClick={handleSend} className="btn btn-primary">Actualizar</button>
-      </div>
+      {
+        id_subject &&
+        <div>
+          <h2>{(subject.id_subject) ? subject.name : "Configurar respuestas"}</h2>
+          <form action="">
+            <textarea onChange={e => setContent(e.target.value)} cols="100" rows="10" defaultValue={content}></textarea>
+          </form>
+          <div>
+            <button onClick={handleSend} className="btn btn-primary">Actualizar Respuestas</button>
+          </div>
+        </div>
+      }
     </div>
   )
 }

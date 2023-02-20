@@ -14,7 +14,7 @@ function Login() {
       const password = e.target[1].value;
       try{
         signInWithEmailAndPassword(auth, email, password);
-        navigate("/")
+        navigate("/");
       }catch(error){
         setError(true);
         const errorCode = error.code;

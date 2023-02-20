@@ -1,27 +1,38 @@
 import "../admin.scss"
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
 import TextArea from "../components/TextArea";
 import Subjects from "../components/Subjects";
+import ListManager from "../components/ListManager";
+import Navbar from "../components/Navbar";
 import { SubjectContext } from "../context/SubjectContext";
+import createRipple from '../ripples';
 
 function Panel() {
   const {data} = useContext(SubjectContext);
+
+  useEffect(() => {
+    const updateButtons = () =>{
+        const buttons = document.getElementsByTagName("button");
+        for (const button of buttons) {
+          button.addEventListener("click", createRipple);
+        }
+    }
+    return () =>{
+        updateButtons()
+    }
+  })
+
   return (
         <div className="admin">
-            <header>
-                <nav>
-                    <ul className="list">
-                        <li className="list-item">Home</li>
-                        <li className="list-item">Noticias</li>
-                        <li className="list-item"><Link to="/">Chat</Link></li>
-                        <li className="list-item">Contacto</li>
-                    </ul>
-                </nav>
-            </header>
+            <Navbar/>
             <div className="container">
                 <Subjects/>
-                <TextArea subject={data.subject}/>
+                <div className="card">
+                    <div className="column">
+                      <TextArea subject={data.subject}/>
+                      <ListManager subject={data.subject}/>
+                    </div>
+                </div>
             </div>
         </div>  
   );

@@ -1,18 +1,20 @@
-const createRipples = (event) => {
+function createRipple(event) {
+    const button = event.currentTarget;
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
 
-    const ripples = document.createElement("span")
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${event.clientX - (button.offsetLeft + radius)}px`;
+    circle.style.top = `${event.clientY - (button.offsetTop + radius)}px`;
+    circle.classList.add("ripple"); 
 
-    const x = event.clientX - event.offsetLeft
-    const y = event.clientY - event.offsetTop
+    const ripple = button.getElementsByClassName("ripple")[0];
 
-    ripples.style.left = `${x}px`
-    ripples.style.top = `${y}px`
-
-    this.appendChild(ripples)
-
-    setTimeout(() => {
-        ripples.remove()
-    }, 1000)
+    if (ripple) {
+        ripple.remove();
+    }
+    button.appendChild(circle);
 }
 
-export default createRipples;
+export default createRipple;
