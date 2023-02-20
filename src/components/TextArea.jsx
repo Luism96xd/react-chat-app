@@ -18,7 +18,8 @@ const TextArea = ({ subject }) => {
       setLoading(true);
       if (id_subject !== null && id_subject !== undefined) {
         try {
-          const response = await axios.get(BASE_URL + "/subjects/" + id_subject + "/descriptions/");
+          let endpoint = BASE_URL + "/subjects/" + id_subject + "/descriptions/";
+          const response = await axios.get(endpoint);
           const description = (response.data[0]) ? response.data[0].context : "";
           setContent(description);
         } catch (error) {
@@ -79,15 +80,15 @@ const TextArea = ({ subject }) => {
         console.error(error.message);
       }
     }
-    /*
+    
     const id = subject.id_subject.toString();
-    const name = subject.name.toLowerCase().replace(" ", "-");
+    const name = subject.name.toLowerCase().replace(/\s/g, "-");
     await setDoc(doc(db, "contextos", name), {
       id_subject: id,
       contexto: content,
       lastModified: serverTimestamp()
     });
-    */
+    
   }
 
   return (

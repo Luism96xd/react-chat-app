@@ -7,7 +7,7 @@ import Delete from '../img/delete.svg';
 const ListManager = ({ subject }) => {
     const [questions, setQuestions] = useState([]);
     const [inputFields, setInputFields] = useState([
-        { question: '', id_question: 0, id_subject: 0 }
+        { question: '', id_question: 1, id_subject: subject.id_subject }
     ]);
     const { data } = useContext(SubjectContext);
     const { id_subject } = data.subject;
@@ -18,6 +18,7 @@ const ListManager = ({ subject }) => {
         const getQuestions = async () => {
             if (id_subject!== null && id_subject !== undefined) {
                 let endpoint = BASE_URL + "/subjects/" + subject.id_subject + "/questions/";
+                console.log(endpoint);
                 try {
                     const response = await axios.get(endpoint);
                     setQuestions(response.data);

@@ -22,7 +22,9 @@ const Subjects = () => {
         const getSubjects = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(BASE_URL + '/subjects/');
+                const endpoint = BASE_URL + '/subjects/';
+                console.log(endpoint);
+                const response = await axios.get(endpoint);
                 setSubjects(response.data);
                 console.log(response.data)
             } catch (error) {
