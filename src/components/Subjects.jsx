@@ -42,7 +42,7 @@ const Subjects = () => {
             //setSubjects(items);
         }
         getSubjects();
-    }, [])
+    }, [subjects])
 
     const handleSelect = (subject) => {
         dispatch({ type: "CHANGE_SUBJECT", payload: subject });
