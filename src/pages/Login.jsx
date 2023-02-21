@@ -25,7 +25,6 @@ function Login() {
           navigate("/");
         }
 
-        navigate("/");
       }catch(error){
         setError(true);
         const errorCode = error.code;
