@@ -1,4 +1,4 @@
-import "../admin.scss"
+import "../scss/pages/admin.scss";
 import React, { useContext, useEffect } from "react";
 import TextArea from "../components/TextArea";
 import Subjects from "../components/Subjects";
@@ -8,33 +8,33 @@ import { SubjectContext } from "../context/SubjectContext";
 import createRipple from '../ripples';
 
 function Panel() {
-  const {data} = useContext(SubjectContext);
+  const { data } = useContext(SubjectContext);
 
   useEffect(() => {
-    const updateButtons = () =>{
-        const buttons = document.getElementsByTagName("button");
-        for (const button of buttons) {
-          button.addEventListener("click", createRipple);
-        }
+    const updateButtons = () => {
+      const buttons = document.getElementsByTagName("button");
+      for (const button of buttons) {
+        button.addEventListener("click", createRipple);
+      }
     }
-    return () =>{
-        updateButtons()
+    return () => {
+      updateButtons()
     }
   })
 
   return (
-        <div className="admin">
-            <Navbar/>
-            <div className="container">
-                <Subjects/>
-                <div className="card">
-                    <div className="column">
-                      <TextArea subject={data.subject}/>
-                      <ListManager subject={data.subject}/>
-                    </div>
-                </div>
-            </div>
-        </div>  
+    <div className="admin">
+      <Navbar />
+      <div className="container">
+        <Subjects />
+        <div className="card">
+          <div className="column">
+            <TextArea subject={data.subject} />
+            <ListManager subject={data.subject} />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -1,6 +1,5 @@
 import { doc, serverTimestamp, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
-import "../components/_ripples.scss";
 import { SubjectContext } from '../context/SubjectContext';
 import { db } from '../firebase';
 import axios from 'axios';
@@ -11,7 +10,7 @@ const TextArea = ({ subject }) => {
 
   const BASE_URL = "https://virtual-assistant.onrender.com";
   const { data } = useContext(SubjectContext);
-  const { id_subject, name } = data.subject;
+  const { id_subject } = data.subject;
 
   useEffect(() => {
     const getData = async () => {

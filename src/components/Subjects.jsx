@@ -2,8 +2,6 @@ import Edit from '../img/edit.svg';
 import Delete from '../img/delete.svg';
 import React, { useContext, useState, useEffect } from "react";
 import axios from 'axios';
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../firebase";
 import { SubjectContext } from "../context/SubjectContext";
 import { Modal } from "./Modal";
 import { AddSubject } from "../components/AddSubject";

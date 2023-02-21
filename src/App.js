@@ -1,28 +1,21 @@
 import './App.css';
-import "./style.scss";
-import "./login.scss";
+import "./scss/style.scss";
+import "./scss/pages/login.scss";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AdminPanel from './pages/AdminPanel';
-import Chat from './pages/IAChat';
-
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
-import { useContext, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 
 function App() {
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
-  const ProtectedRoute = ({children}) => {
-    if (!currentUser){
-      return <Navigate to="/login"/>
-    }else{
+  const ProtectedRoute = ({ children }) => {
+    if (!currentUser) {
+      return <Navigate to="/login" />
+    } else {
       return children;
     }
   }
@@ -35,11 +28,10 @@ function App() {
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
-          }/>
-          <Route path="/login" element={<Login/>} />
-          <Route path="/register" element={<Register/>} />
-          <Route path="/admin" element={<AdminPanel/>} />
-          <Route path="/chat" element={<Chat/>} />
+          } />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </Router>
     </div>

@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Cassandra Virtual Assistant
+
+Un asistente virtual impulsado por inteligencia artificial para la optimización del servicio de atención al cliente en la Universidad Tecnológica del Centro.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

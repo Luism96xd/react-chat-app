@@ -1,7 +1,8 @@
 import {signInWithEmailAndPassword } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
 import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 function Login() {
 
@@ -13,7 +14,17 @@ function Login() {
       const email = e.target[0].value;
       const password = e.target[1].value;
       try{
-        signInWithEmailAndPassword(auth, email, password);
+        const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+        const id = userCredentials.user.uid;
+        const docSnap = await getDoc(doc(db, "users", id));
+        const isAdmin = docSnap.data().isAdmin;
+
+        if (docSnap.exists() && isAdmin) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+
         navigate("/");
       }catch(error){
         setError(true);

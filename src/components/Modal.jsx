@@ -1,5 +1,5 @@
 import React from 'react';
-import "./_modals.scss";
+import "../scss/components/_modals.scss";
 
 export const Modal = ({title, children}) => {
   return (
