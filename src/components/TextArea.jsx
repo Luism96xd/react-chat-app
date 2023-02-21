@@ -98,7 +98,10 @@ const TextArea = ({ subject }) => {
         <div>
           <h2>{(subject.id_subject) ? subject.name : "Configurar respuestas"}</h2>
           <form action="">
-            <textarea onChange={e => setContent(e.target.value)} cols="100" rows="10" defaultValue={content}></textarea>
+            <textarea onChange={e => setContent(e.target.value)} 
+              cols="100" rows="10" 
+              defaultValue={content}>
+            </textarea>
           </form>
           <div>
             <button onClick={handleSend} className="btn btn-primary">Actualizar Respuestas</button>

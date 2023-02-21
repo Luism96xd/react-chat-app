@@ -6,26 +6,32 @@ import Delete from '../img/delete.svg';
 
 const ListManager = ({ subject }) => {
     const [questions, setQuestions] = useState([]);
+    const [lastId, setLastId] = useState(1);
     const [inputFields, setInputFields] = useState([
         { question: '', id_question: 1, id_subject: subject.id_subject }
     ]);
     const { data } = useContext(SubjectContext);
     const { id_subject } = data.subject;
-    
+
     const BASE_URL = "https://virtual-assistant.onrender.com";
+    //const BASE_URL = "http://localhost:8080";
 
     useEffect(() => {
         const getQuestions = async () => {
-            if (id_subject!== null && id_subject !== undefined) {
-                let endpoint = BASE_URL + "/subjects/" + subject.id_subject + "/questions/";
+            setLastId(1);
+
+            if (id_subject !== null && id_subject !== undefined) {
+                let endpoint = BASE_URL + "/subjects/" + id_subject + "/questions/";
                 console.log(endpoint);
                 try {
                     const response = await axios.get(endpoint);
                     setQuestions(response.data);
-                    if(response.data.length > 1){
+                    if (response.data.length > 0) {
                         setInputFields(response.data);
-                    }else{
-                        setInputFields([{ question: '', id_question: 0, id_subject: 0 }])
+                        console.log("Last id: " + response.data.at(-1).id_question);
+                        setLastId(response.data.at(-1).id_question);
+                    } else {
+                        setInputFields([{ question: '', id_question: 1, id_subject: id_subject }])
                     }
                     console.log(response.data)
                 } catch (error) {
@@ -39,14 +45,14 @@ const ListManager = ({ subject }) => {
     const addFields = (e) => {
         e.preventDefault();
         let newfield = { question: '', id_subject: subject.id_subject }
+        setLastId(lastId + 1);
         setInputFields([...inputFields, newfield]);
-        console.log(inputFields)
     }
 
     const handleFormChange = (index, event) => {
         let data = [...inputFields];
         data[index][event.target.name] = event.target.value;
-        data[index]["id_question"] = parseInt(index + 1);
+        data[index]["id_question"] = (data[index]["id_question"]) ? data[index]["id_question"] : parseInt(index + 1);
         data[index]["id_subject"] = parseInt(subject.id_subject);
         setInputFields(data);
     }
@@ -56,18 +62,44 @@ const ListManager = ({ subject }) => {
         console.log(inputFields);
         let endpoint = BASE_URL + "/subjects/" + subject.id_subject + "/questions/";
         try {
-            const response = await axios.post(endpoint, inputFields);
-            console.log(response)
+            inputFields.forEach(async (object) => {
+                let endpoint2 = endpoint + object.id_question;
+                const response = await axios.get(endpoint2);
+
+                if (response.data[0]) {
+                    let response = await axios.put(endpoint2, {
+                        question: object.question,
+                        id_question: object.id_question
+                    });
+                    console.log("PUT: ", response);
+                } else {
+                    let response = await axios.post(endpoint, {
+                        question: object.question,
+                        id_question: object.id_question
+                    });
+                    console.log("POST: ", response);
+                }
+            });
+            //Crear un nuevo intent de Dialogflow
+            let phrases = inputFields.map(row => row.question);
+            await axios.post(BASE_URL + "/intents/", {
+                displayName: subject.name,
+                trainingPhrasesParts: phrases,
+                messageTexts: ["Tu consulta será resuelta a la brevedad posible"]
+            });
+
         } catch (error) {
             console.log(error);
         }
 
     }
 
-    const removeFields = (index) => {
+    const removeFields = (e, index) => {
+        e.preventDefault();
         let data = [...inputFields];
-        data.splice(index, 1)
-        setInputFields(data)
+        data.splice(index, 1);
+        setLastId(lastId - 1);
+        setInputFields(data);
     }
 
     return (
@@ -90,7 +122,7 @@ const ListManager = ({ subject }) => {
                                             <button onClick={addFields}>
                                                 <img src={Add} alt="Añadir una nueva pregunta" />
                                             </button>
-                                            <button onClick={() => removeFields(index)}>
+                                            <button onClick={(e) => removeFields(e, index)}>
                                                 <img src={Delete} alt="Borrar pregunta" />
                                             </button>
                                         </div>

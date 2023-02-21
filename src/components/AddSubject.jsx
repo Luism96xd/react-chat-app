@@ -8,6 +8,8 @@ export const AddSubject = ({id, setIsOpen}) => {
     const [loading, setLoading] = useState(true);
     const [subject, setSubject] = useState([]);
 
+    const BASE_URL = 'https://virtual-assistant.onrender.com/subjects/';
+
     useEffect(() => {
         const getData = async () =>{
             setLoading(true);
@@ -16,7 +18,8 @@ export const AddSubject = ({id, setIsOpen}) => {
             }
             try {
                 console.log("Fetching data");
-                const response = await axios.get('https://virtual-assistant.onrender.com/subjects/'+id);
+                let endpoint = BASE_URL + id;
+                const response = await axios.get(endpoint);
                 setSubject(response.data[0]);
             }catch (error) {
                 console.error(error.message);
