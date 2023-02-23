@@ -6,11 +6,22 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AdminPanel from './pages/AdminPanel';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from './context/AuthContext';
+import { requestPermission } from "./messaging";
+import NewsPanel from './pages/NewsPanel';
 
 function App() {
   const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const unsuscribe = () => {
+      if(currentUser.uid){
+        requestPermission(currentUser);
+      }
+    }
+    unsuscribe()
+  }, [currentUser]);
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
@@ -32,6 +43,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/news" element={<NewsPanel />} />
         </Routes>
       </Router>
     </div>

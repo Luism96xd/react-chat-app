@@ -6,7 +6,6 @@ import ListManager from "../components/ListManager";
 import Navbar from "../components/Navbar";
 import { SubjectContext } from "../context/SubjectContext";
 import createRipple from '../ripples';
-
 function Panel() {
   const { data } = useContext(SubjectContext);
 

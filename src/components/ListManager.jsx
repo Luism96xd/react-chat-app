@@ -57,6 +57,14 @@ const ListManager = ({ subject }) => {
         setInputFields(data);
     }
 
+    const removeFields = (e, index) => {
+        e.preventDefault();
+        let data = [...inputFields];
+        data.splice(index, 1);
+        setLastId(lastId - 1);
+        setInputFields(data);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(inputFields);
@@ -92,14 +100,6 @@ const ListManager = ({ subject }) => {
             console.log(error);
         }
 
-    }
-
-    const removeFields = (e, index) => {
-        e.preventDefault();
-        let data = [...inputFields];
-        data.splice(index, 1);
-        setLastId(lastId - 1);
-        setInputFields(data);
     }
 
     return (

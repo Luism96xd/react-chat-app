@@ -2,6 +2,8 @@ import Edit from '../img/edit.svg';
 import Delete from '../img/delete.svg';
 import React, { useContext, useState, useEffect } from "react";
 import axios from 'axios';
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from "../firebase";
 import { SubjectContext } from "../context/SubjectContext";
 import { Modal } from "./Modal";
 import { AddSubject } from "../components/AddSubject";
@@ -21,7 +23,6 @@ const Subjects = () => {
             setLoading(true);
             try {
                 const endpoint = BASE_URL + '/subjects/';
-                console.log(endpoint);
                 const response = await axios.get(endpoint);
                 setSubjects(response.data);
                 console.log(response.data)
@@ -41,7 +42,9 @@ const Subjects = () => {
             */
             //setSubjects(items);
         }
-        getSubjects();
+        return () => {
+            getSubjects();
+        }
     }, [])
 
     const handleSelect = (subject) => {

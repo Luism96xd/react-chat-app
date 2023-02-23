@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SubjectContext } from '../context/SubjectContext';
 import { db } from '../firebase';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const TextArea = ({ subject }) => {
   const [content, setContent] = useState("");
@@ -29,7 +31,6 @@ const TextArea = ({ subject }) => {
     }
     getData();
   }, [id_subject])
-
 
   /*
   useEffect(() => {
@@ -97,10 +98,7 @@ const TextArea = ({ subject }) => {
         <div>
           <h2>{(subject.id_subject) ? subject.name : "Configurar respuestas"}</h2>
           <form action="">
-            <textarea onChange={e => setContent(e.target.value)} 
-              cols="100" rows="10" 
-              defaultValue={content}>
-            </textarea>
+            <ReactQuill className='textarea' onChange={value => setContent(value)} theme="snow" value={content}/>
           </form>
           <div>
             <button onClick={handleSend} className="btn btn-primary">Actualizar Respuestas</button>

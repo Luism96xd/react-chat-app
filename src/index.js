@@ -6,17 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './context/AuthContext';
 import { ChatContextProvider } from './context/ChatContext';
 import { SubjectContextProvider } from './context/SubjectContext';
+import { ToastContextProvider } from './context/ToastContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContextProvider>
-    <ChatContextProvider>
-      <SubjectContextProvider>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-      </SubjectContextProvider>
-    </ChatContextProvider>
+    <ToastContextProvider>
+      <ChatContextProvider>
+        <SubjectContextProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </SubjectContextProvider>
+      </ChatContextProvider>
+    </ToastContextProvider>
   </AuthContextProvider>
 );
 // If you want to start measuring performance in your app, pass a function
