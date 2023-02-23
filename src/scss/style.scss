@@ -63,6 +63,19 @@ $light-color: #ddddf7;
     background-color: #d9534f;
 }
 
+.input{
+    width: 100%;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 10px;
+    outline: none;
+    resize: none;
+}
+
+.input:focus{
+    border: 2px solid #2c77f6;
+}
+
 .textarea{
     width: 100%;
     padding: 8px 10px;

@@ -87,7 +87,7 @@ const Input = () => {
   }
 
   return (
-    <div className="input">
+    <div className="chat-input">
         <input type="text" 
           placeholder="Escribe un mensaje..." 
           onChange={e => setText(e.target.value)}

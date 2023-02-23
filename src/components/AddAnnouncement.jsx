@@ -72,13 +72,13 @@ const AddAnnouncement = ({ id }) => {
         <div>
             <form onSubmit={handleSend} className="form">
                 <div>
-                    <label htmlFor="name">Nombre</label>
+                    <label htmlFor="name"><b>Nombre</b></label>
                 </div>
                 <div>
-                    <input type="text" id="name" onChange={value => setName(value)} defaultValue={name} required />
+                    <input className="input" type="text" id="name" onChange={value => setName(value)} defaultValue={name} required />
                 </div>
                 <div>
-                    <label htmlFor="description">Descripción</label>
+                    <label htmlFor="description"><b>Descripción</b></label>
                 </div>
                 <div>
                     <ReactQuill className='textarea' onChange={value => setDescription(value)} theme="snow" value={description} />

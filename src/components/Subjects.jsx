@@ -42,9 +42,7 @@ const Subjects = () => {
             */
             //setSubjects(items);
         }
-        return () => {
-            getSubjects();
-        }
+        getSubjects();
     }, [])
 
     const handleSelect = (subject) => {
