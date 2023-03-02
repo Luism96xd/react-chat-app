@@ -61,7 +61,7 @@ export const ToastList = ({ toastList, position, setList}) => {
                         </div>
                         <div className="container-2">
                             <p className="title">{toast.title}</p>
-                            <p className="body">{toast.body}</p>
+                            <p className="body">{toast.body.slice(0, 20) + '...'}</p>
                         </div>
                         <button onClick={()  => deleteToast(toast.id)}>&times;</button>
                     </div>
