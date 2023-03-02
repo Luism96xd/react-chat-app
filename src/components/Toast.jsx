@@ -32,16 +32,16 @@ export const Toast = ({ toast, isShow }) => {
     )
 }
 
-export const ToastList = ({ toastList, position, setList}) => { 
+export const ToastList = ({ toastList, position, setList }) => {
 
-    const deleteToast = useCallback(id  => {
-        const toastListItem = toastList.filter(e  => e.id !== id);
+    const deleteToast = useCallback(id => {
+        const toastListItem = toastList.filter(e => e.id !== id);
         setList(toastListItem);
     }, [toastList, setList]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if(toastList.length > 0){
+            if (toastList.length > 0) {
                 deleteToast(toastList[0].id);
             }
         }, 3000);
@@ -50,21 +50,27 @@ export const ToastList = ({ toastList, position, setList}) => {
         }
     }, [toastList, deleteToast]);
 
+    const truncate = (str, length) => {
+        if (str.length > length) {
+            return str.slice(0, length) + '...';
+        } else return str;
+    }
+
     return (
         <div className='toasts-wrapper'>
             {
-                toastList.map((toast, i ) => {
+                toastList.map((toast, i) => {
                     return (
-                    <div key={i} className="toast-success">
-                        <div className="container-1">
-                            
+                        <div key={i} className="toast-success">
+                            <div className="container-1">
+
+                            </div>
+                            <div className="container-2">
+                                <p className="title">{toast.title}</p>
+                                <p className="body">{truncate(toast.body, 20)}</p>
+                            </div>
+                            <button onClick={() => deleteToast(toast.id)}>&times;</button>
                         </div>
-                        <div className="container-2">
-                            <p className="title">{toast.title}</p>
-                            <p className="body">{toast.body.slice(0, 20) + '...'}</p>
-                        </div>
-                        <button onClick={()  => deleteToast(toast.id)}>&times;</button>
-                    </div>
                     )
                 })
             }
