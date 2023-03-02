@@ -10,7 +10,9 @@ const TextArea = ({ subject }) => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState("");
 
-  const BASE_URL = "https://virtual-assistant.onrender.com";
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  console.log("Base: " +BASE_URL)
+
   const { data } = useContext(SubjectContext);
   const { id_subject } = data.subject;
 

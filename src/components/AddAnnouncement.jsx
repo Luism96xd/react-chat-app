@@ -13,8 +13,7 @@ const AddAnnouncement = ({ id }) => {
     const [description, setDescription] = useState("");
     const [open, setIsOpen] = useState(true);
 
-    const BASE_URL = "https://virtual-assistant.onrender.com";
-    //const BASE_URL = "http://localhost:8080";
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const handleSend = async (e) => {
         e.preventDefault();
@@ -45,22 +44,21 @@ const AddAnnouncement = ({ id }) => {
             }
         }
         */
-        /*
-        const registrationTokens = [];
+        
+        const tokens = [];
         const q = query(collection(db, "users"), where("FCMToken", "!=", null));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
             let token = doc.data().FCMToken;
             console.log(token)
-            registrationTokens.push(token);
+            tokens.push(token);
         });
-        const response = await axios.post(BASE_URL + '/api/sendMessages', {
+        await axios.post(BASE_URL + '/api/sendMessages', {
             title: name,
             body: description,
-            registrationTokens: registrationTokens
+            registrationTokens: tokens
         });
-        */
-
+        console.log(BASE_URL + '/api/sendMessages');
         await axios.post(BASE_URL + '/api/sendMessage', {
             chatId: -1001877599861,
             text: description
@@ -75,7 +73,7 @@ const AddAnnouncement = ({ id }) => {
                     <label htmlFor="name"><b>Nombre</b></label>
                 </div>
                 <div>
-                    <input className="input" type="text" id="name" onChange={value => setName(value)} defaultValue={name} required />
+                    <input className="input" type="text" id="name" onChange={e => setName(e.target.value)} defaultValue={name} required />
                 </div>
                 <div>
                     <label htmlFor="description"><b>Descripción</b></label>

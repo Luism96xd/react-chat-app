@@ -10,7 +10,9 @@ const TextEditor = ({ id, title, field, endpoint }) => {
   const [loading, setLoading] = useState("");
 
   //const BASE_URL = "https://virtual-assistant.onrender.com";
-  const BASE_URL = "http://localhost:8080";
+  //const BASE_URL = "http://localhost:8080";
+
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     const getData = async () => {
