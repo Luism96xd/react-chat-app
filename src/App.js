@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     const unsuscribe = () => {
-      if(currentUser.uid){
+      if(currentUser){
         requestPermission(currentUser);
       }
     }
