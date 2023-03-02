@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import '../scss/pages/admin.scss'
 import axios from 'axios';
 import { db } from '../firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 
 const AddAnnouncement = ({ id }) => {
@@ -58,11 +58,19 @@ const AddAnnouncement = ({ id }) => {
             body: description,
             registrationTokens: tokens
         });
-        console.log(BASE_URL + '/api/sendMessages');
-        await axios.post(BASE_URL + '/api/sendMessage', {
-            chatId: -1001877599861,
-            text: description
-        });
+
+        const datosRef = doc(db, "datos", 'general');
+        const document = await getDoc(datosRef);
+
+        if(!document.exists()){
+            console.log('No such document');
+        }else{
+            const data = document.data();
+            await axios.post(BASE_URL + '/api/sendMessage', {
+                chatId: data.canal_id,
+                text: description
+            });
+        }
 
     }
     return (

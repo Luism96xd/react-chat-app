@@ -14,12 +14,10 @@ const Search = () => {
 
     const handleSearch = async () => {
         const usersRef = collection(db, "users");
-
         const q = query(usersRef, where("displayName", "==", username));
 
         try {
             const querySnapshot = await getDocs(q);
-
             querySnapshot.forEach((doc) => {
                 setUser(doc.data())
                 console.log(doc.id, " => ", doc.data());
