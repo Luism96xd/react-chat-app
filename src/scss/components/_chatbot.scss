@@ -121,3 +121,17 @@
         transform: scale(1);
     }
 }
+#audio-2{
+    display: none;
+}
+
+.audio-icon {
+    width: 30px;
+    height: 30px;
+    background-image: url('../../img/audio.svg');
+    background-size: cover;
+}
+
+.audio-icon:hover {
+    cursor: pointer;
+}

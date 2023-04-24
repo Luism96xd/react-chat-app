@@ -1,0 +1,91 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica", sans-serif;
+    background-color: #f5f5f5;
+}
+
+.chatbox {
+    float: right;
+    width: 100%;
+    min-width: 250px;
+    height: 80vh;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.chatlogs {
+    min-width: 250px;
+    width: 100%;
+    height: 460px;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.chatlogs .msg {
+    min-width: 250px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+.chatlogs .msg.me {
+    text-align: left;
+    background-color: #daeffa;
+    border-radius: 10px 10px 0 10px;
+    padding: 10px 24px;
+    margin-left: auto;
+
+}
+
+.chatlogs .msg.bot {
+    text-align: left;
+    background-color: #f5f5f5;
+    border-radius: 0px 10px 10px 10px;
+    padding: 10px 24px;
+    margin-right: auto;
+}
+
+.chatbox .chatinput {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 10px 32px;
+    position: relative;
+    justify-content: center;
+    gap: 16px;
+}
+
+.chatbox .chatinput input {
+    height: 40px;
+    width: 80%;
+    border: 2px solid #ddd;
+    border-radius: 30px;
+    padding: 0 15px;
+}
+
+.chatbox .chatinput .send {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #697ec4;
+    border: none;
+    outline: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.chatbox .chatinput .send .icon {
+    font-size: 22px;
+    color: #fff;
+    width: 70%;
+    height: 70%;                
+}

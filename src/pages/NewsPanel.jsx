@@ -28,12 +28,15 @@ const NewsPanel = () => {
     return (
         <div>
             <Navbar/>
-            <div className="container">
-                <div className='card'>
+            <div className="container grid">
+                <aside>
+
+                </aside>
+                <div className='card center'>
                    <AddAnnouncement/>
                 </div>
             </div>
-            <button onClick={() => showToast()}>Show Notification</button>
+            <button style={{display: "none"}} onClick={() => showToast()}>Show Notification</button>
             {list && <ToastList toastList={list} setList={setList}/>}
         </div>
     )

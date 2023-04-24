@@ -8,7 +8,7 @@ export const AddSubject = ({id, setIsOpen}) => {
     const [loading, setLoading] = useState(true);
     const [subject, setSubject] = useState([]);
 
-    const BASE_URL = 'https://virtual-assistant.onrender.com/subjects/';
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
         const getData = async () =>{
@@ -63,11 +63,11 @@ export const AddSubject = ({id, setIsOpen}) => {
         e.preventDefault();
         const name = e.target[0].value;
         const description = e.target[1].value;
-
         try {
-            await axios.post(
-                'https://virtual-assistant.onrender.com/subjects/', {name, description}
-            );
+            const endpoint = BASE_URL + "/subjects/";
+            console.log(endpoint)
+            await axios.post(endpoint, {name, description});
+            window.location.reload(false);
         }catch (error) {
             console.error(error.message);
         }

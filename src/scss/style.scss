@@ -6,34 +6,49 @@
 $dark-color: #2f2d52;
 $light-color: #ddddf7;
 
-@mixin mobile{
-    @media screen and (max-width: 480px){
-        @content;
-    }
-}
-@mixin tablet{
-    @media screen and (max-width: 768px){
-        @content;
-    }
-}
-@mixin laptop{
-    @media screen and (max-width: 1200px){
+@mixin mobile {
+    @media screen and (max-width: 480px) {
         @content;
     }
 }
 
-*{
+@mixin tablet {
+    @media screen and (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin laptop {
+    @media screen and (max-width: 1200px) {
+        @content;
+    }
+}
+
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-.column{
+.grid{
+    grid-template-columns: minmax(250px, 1fr) minmax(400px, 2fr);
+    padding: 0px 16px;
+}
+
+.column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 32px
+    gap: 32px;
+    width: 100%;
 }
-.card{
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background-color: white;
     border: 1px solid white;
     border-radius: 10px;
     margin: 0 auto;
@@ -42,28 +57,32 @@ $light-color: #ddddf7;
     display: flex;
     padding: 32px;
     max-width: 1536px;
-    margin: 0 auto;
     box-shadow: 1px 1px 8px 1px #ddd;
-    justify-content: center;
-    align-items: center;
 }
-.flex{
+.bordered{
+    border: 1px solid #222;
+}
+
+.flex {
     display: flex;
     justify-content: space-between;
 }
-.container{
+
+.container {
     display: flex;
     justify-content: center;
     margin: 0 auto;
 }
-.success{
+
+.success {
     background-color: #5cb85c;
 }
-.danger{
+
+.danger {
     background-color: #d9534f;
 }
 
-.input{
+.input {
     width: 100%;
     border: 2px solid #ccc;
     border-radius: 8px;
@@ -72,22 +91,24 @@ $light-color: #ddddf7;
     resize: none;
 }
 
-.input:focus{
+.input:focus {
     border: 2px solid #2c77f6;
 }
 
-.textarea{
+.textarea {
     width: 100%;
     padding: 8px 10px;
     border: none;
     outline: none;
     resize: none;
     margin: 8px 0;
-    .ql-toolbar{
+
+    .ql-toolbar {
         border: 2px solid #ccc;
         border-radius: 8px 8px 0 0;
     }
-    .ql-container{
+
+    .ql-container {
         border: 2px solid #ccc;
         border-radius: 0px 0px 8px 8px;
         font-family: 'Poppins', sans-serif;
@@ -97,6 +118,18 @@ $light-color: #ddddf7;
     }
 }
 
-.ql-editor{
-    min-width: 800px;
+
+#audio{
+    display: none;
+}
+
+.audio-icon {
+    width: 30px;
+    height: 30px;
+    background-image: url('../img/audio.svg');
+    background-size: cover;
+}
+
+.audio-icon:hover {
+    cursor: pointer;
 }

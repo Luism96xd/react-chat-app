@@ -6,7 +6,7 @@ export const SubjectContextProvider = ({ children }) => {
 
     const INITIAL_STATE = {
         subject: {
-            id_subject: null,
+            subject_id: null,
             name: ""
         }
     }
@@ -14,6 +14,7 @@ export const SubjectContextProvider = ({ children }) => {
     const subjectReducer = (state, action)  => {
         switch (action.type) {
             case "CHANGE_SUBJECT":
+                console.log(action.payload)
                 return {
                     subject: action.payload,
                 }     

@@ -14,15 +14,15 @@ const Subjects = () => {
     const [loading, setLoading] = useState(true);
     const [subjects, setSubjects] = useState([]);
     const { data, dispatch } = useContext(SubjectContext);
-
-    const BASE_URL = "https://virtual-assistant.onrender.com";
-    //const BASE_URL = "http://localhost:8080";
+    
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
         const getSubjects = async () => {
             setLoading(true);
             try {
                 const endpoint = BASE_URL + '/subjects/';
+                console.log(endpoint)
                 const response = await axios.get(endpoint);
                 setSubjects(response.data);
                 console.log(response.data)
@@ -63,7 +63,7 @@ const Subjects = () => {
                         .map((subject) => {
                             return (
                                 <li className="list-item"
-                                    key={subject[1].id_subject}
+                                    key={subject[1].subject_id}
                                     onClick={() => handleSelect(subject[1])}>
                                     <span>{subject[1].name}</span>
                                     <div className="icons">

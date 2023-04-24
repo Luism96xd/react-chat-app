@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import ChatBubble from "../img/chat_bubble_filled.svg";
 import Send from "../img/send.svg";
+import axios from 'axios';
+import '../scss/components/_chatbot.scss';
 
 const Chatbot = () => {
     const [chat, setChat] = useState(false);
     const [text, setText] = useState("");
+    const [audio, setAudio] = useState(null);
 
-    const handleSend = () =>{
-        console.log(chat);
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+    const handleSend = async () =>{
+        const response = await axios.post(BASE_URL+'/api/predict', {text: text});
+        setAudio(response.audio);
+        console.log(response);
     }
 
     return (
@@ -22,6 +29,9 @@ const Chatbot = () => {
                         </div>
                     </div>
                     <div className='chatbot-chat'>
+                        <span className="audio-icon">
+                            <audio id="audio" src={audio} controls></audio>
+                        </span>
                         <span>{text}</span>
                     </div>
                     <div className='chatbot-input'>

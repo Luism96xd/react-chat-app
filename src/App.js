@@ -10,6 +10,9 @@ import { useContext, useEffect } from 'react';
 import { AuthContext } from './context/AuthContext';
 import { requestPermission } from "./messaging";
 import NewsPanel from './pages/NewsPanel';
+import { Example } from './pages/example';
+import TicketsPage from './pages/TicketsPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -44,6 +47,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/news" element={<NewsPanel />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/tickets" element={<TicketsPage />} />
         </Routes>
       </Router>
     </div>

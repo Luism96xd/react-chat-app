@@ -11,17 +11,17 @@ const TextArea = ({ subject }) => {
   const [loading, setLoading] = useState("");
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  console.log("Base: " +BASE_URL)
 
   const { data } = useContext(SubjectContext);
-  const { id_subject } = data.subject;
+  const { subject_id } = data.subject;
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      if (id_subject !== null && id_subject !== undefined) {
+      if (subject_id !== null && subject_id !== undefined) {
         try {
-          let endpoint = BASE_URL + "/subjects/" + id_subject + "/descriptions/";
+          let endpoint = BASE_URL + "/subjects/" + subject_id + "/descriptions/";
+          console.log(endpoint)
           const response = await axios.get(endpoint);
           const description = (response.data[0]) ? response.data[0].context : "";
           setContent(description);
@@ -32,7 +32,7 @@ const TextArea = ({ subject }) => {
       }
     }
     getData();
-  }, [id_subject])
+  }, [subject_id])
 
   /*
   useEffect(() => {
@@ -63,8 +63,8 @@ const TextArea = ({ subject }) => {
   */
 
   const handleSend = async () => {
-    if (id_subject !== null && id_subject !== undefined) {
-      const endpoint = BASE_URL + "/subjects/" + id_subject + "/descriptions/";
+    if (subject_id !== null && subject_id !== undefined) {
+      const endpoint = BASE_URL + "/subjects/" + subject_id + "/descriptions/";
       try {
         const response = await axios.get(endpoint);
         if(response.data[0]){
@@ -83,10 +83,10 @@ const TextArea = ({ subject }) => {
       }
     }
     
-    const id = subject.id_subject.toString();
+    const id = subject.subject_id.toString();
     const name = subject.name.toLowerCase().replace(/\s/g, "-");
     await setDoc(doc(db, "contextos", name), {
-      id_subject: id,
+      subject_id: id,
       contexto: content,
       lastModified: serverTimestamp()
     });
@@ -96,9 +96,9 @@ const TextArea = ({ subject }) => {
   return (
     <div className='workspace'>
       {
-        id_subject &&
+        subject_id &&
         <div>
-          <h2>{(subject.id_subject) ? subject.name : "Configurar respuestas"}</h2>
+          <h2>{(subject.subject_id) ? subject.name : "Configurar respuestas"}</h2>
           <form action="">
             <ReactQuill className='textarea' onChange={value => setContent(value)} theme="snow" value={content}/>
           </form>

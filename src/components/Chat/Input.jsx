@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
-import { doc, updateDoc, arrayUnion, Timestamp, serverTimestamp } from "firebase/firestore";
-import Img from '../img/img.png';
-import Attach from '../img/attach.png';
+import axios from 'axios';
+import { doc, updateDoc, arrayUnion, Timestamp, serverTimestamp, getDoc } from "firebase/firestore";
+import Img from '../../img/img.png';
+import Attach from '../../img/attach.png';
 import { uuidv4 } from '@firebase/util';
-import { AuthContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
+import { AuthContext } from '../../context/AuthContext';
+import { ChatContext } from '../../context/ChatContext';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { storage, db } from '../firebase';
+import { storage, db } from '../../firebase';
 
 const Input = () => {
   const {currentUser} = useContext(AuthContext);
@@ -14,6 +15,8 @@ const Input = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
   const [error, setError] = useState(false);
+
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const handleSend = async () => {
     if (img){ 
@@ -27,6 +30,17 @@ const Input = () => {
           date: Timestamp.now(),
         })
       });
+    }
+    //Enviar notificación al destinatario
+    const userRef = doc(db, "users", data.user.uid);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+        const {FCMToken} = docSnap.data();
+        const response = await axios.post(BASE_URL + '/api/sendMessages', {
+          title: `Nuevo mensaje de ${currentUser.displayName}`,
+          body: text,
+          registrationTokens: [FCMToken]
+        });
     }
     //Actualizar mi último mensaje enviado
     await updateDoc(doc(db, "userChats", currentUser.uid), {

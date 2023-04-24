@@ -26,7 +26,7 @@ function Panel() {
       <Navbar />
       <div className="container">
         <Subjects />
-        <div className="card">
+        <div className="card center">
           <div className="column">
             <TextArea subject={data.subject} />
             <ListManager subject={data.subject} />
