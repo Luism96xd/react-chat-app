@@ -97,13 +97,12 @@
         display: flex;
         justify-content: center;
         gap: 32px;
-        margin: 0 32px;
-        
+
         @include mobile(){
-            margin: 0;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
         }
     }
     .sidebar{

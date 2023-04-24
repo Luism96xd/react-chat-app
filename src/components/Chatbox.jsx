@@ -41,6 +41,13 @@ const Chatbox = ({ data }) => {
         setText("");
     }
 
+    const handleKey = (e) => {
+        if (e.code === "Enter") {
+            console.log("enter");
+            handleSend();
+        };
+    }
+
     const playOutput = (audioBuffer) => {
         let audioContext = new AudioContext();
         let outputSource;
@@ -72,8 +79,8 @@ const Chatbox = ({ data }) => {
             <div className="chatlogs">
                 <div className="msg bot">¡Hola! Soy Cassandra, tu asistente virtual. ¿En qué te puedo ayudar?</div>
                 {data?.map((item, index) => (
-                    <div 
-                        className={`msg ${(item.senderId == 'bot')? 'bot' : 'me'}`}
+                    <div
+                        className={`msg ${(item.senderId == 'bot') ? 'bot' : 'me'}`}
                         key={index}
                     >
                         <p>{item.text}</p>
@@ -86,6 +93,7 @@ const Chatbox = ({ data }) => {
                     value={text}
                     placeholder="Escribe un mensaje..."
                     onChange={(e) => setText(e.target.value)}
+                    onKeyDown={handleKey}
                 />
                 <button className="send" onClick={handleSend}>
                     <img src={Send} className='icon' alt="Send message" />

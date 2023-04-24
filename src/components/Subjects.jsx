@@ -52,10 +52,7 @@ const Subjects = () => {
             }
         }
         console.log(subjects);
-
-        return () => {
-            getSubjects();
-        }
+        getSubjects();
     }, [])
 
     const handleSelect = (subject) => {
