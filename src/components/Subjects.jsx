@@ -51,6 +51,8 @@ const Subjects = () => {
                 setLoading(false);
             }
         }
+        console.log(subjects);
+
         return () => {
             getSubjects();
         }
@@ -64,7 +66,6 @@ const Subjects = () => {
         dispatch({ type: "CHANGE_SUBJECT", payload: {} });
         setIsOpen(true);
     }
-    console.log(subjects);
     return (
         <div className="sidebar">
             <ul className="list">

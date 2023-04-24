@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../scss/components/_search.scss';
-import search from '../img/search-outline.svg'
+import search from '../img/search-outline.svg';
 
 const FilterableList = ({ data, field='name', renderList }) => {
     const [filter, setFilter] = useState('');
