@@ -7,9 +7,12 @@ import axios from 'axios';
 export const AddSubject = ({id, setIsOpen}) => {
     const [loading, setLoading] = useState(true);
     const [subject, setSubject] = useState([]);
+    const [title, setTitle] = useState([]);
+    const [content, setContent] = useState([]);
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+    /*
     useEffect(() => {
         const getData = async () =>{
             setLoading(true);
@@ -31,7 +34,7 @@ export const AddSubject = ({id, setIsOpen}) => {
         }
         
     }, [id]);
-    /*
+    */
     useEffect(() => {
         const getData = async () =>{
             if (id == null){
@@ -57,12 +60,12 @@ export const AddSubject = ({id, setIsOpen}) => {
         getData();
       }
     }, [id])
-    */
 
     const handleCreate = async (e) =>{
         e.preventDefault();
         const name = e.target[0].value;
         const description = e.target[1].value;
+        /*
         try {
             const endpoint = BASE_URL + "/subjects/";
             console.log(endpoint)
@@ -71,22 +74,23 @@ export const AddSubject = ({id, setIsOpen}) => {
         }catch (error) {
             console.error(error.message);
         }
-        setIsOpen(false)
-        /*
+        */
         try{
             const res = await addDoc(collection(db, "topicos"), { 
-                nombre: name,
-                descripcion: description
+                name: name,
+                description: description,
+                creation_date: new Date().toISOString()
             });
             await updateDoc(doc(db, "topicos", res.id), { 
-                id: res.id,
+                subject_id: res.id,
             });
+            sessionStorage.removeItem('temas');
+            window.location.reload(false);
             setIsOpen(false)
         }catch(error){
             console.log(error);
         }
-        */
-
+        setIsOpen(false);
     }
     return (
     <div>

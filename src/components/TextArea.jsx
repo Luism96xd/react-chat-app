@@ -7,6 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const TextArea = ({ subject }) => {
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState("");
 
@@ -15,6 +16,7 @@ const TextArea = ({ subject }) => {
   const { data } = useContext(SubjectContext);
   const { subject_id } = data.subject;
 
+  /*
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -33,16 +35,14 @@ const TextArea = ({ subject }) => {
     }
     getData();
   }, [subject_id])
-
-  /*
+  */
   useEffect(() => {
     const getData = async () => {
-      //let id = subject.id_subject;
-      let name = subject.name.toLowerCase().replace(" ", "-");
-      if (name !== "") {
+      let id = subject.subject_id;
+      //let name = subject.name.toLowerCase().replace(" ", "-");
+      if (id !== null) {
         console.log("Fetching data from database");
-        console.log("Name", name);
-        const ref = doc(db, "contextos", name);
+        const ref = doc(db, "contextos", id);
         const docSnap = await getDoc(ref);
 
         if (docSnap.exists()) {
@@ -56,13 +56,11 @@ const TextArea = ({ subject }) => {
         }
       }
     }
-    return () => {
-      getData();
-    }
-  }, [subject.name]);
-  */
+    getData();
+  }, [subject_id]);
 
   const handleSend = async () => {
+    /*
     if (subject_id !== null && subject_id !== undefined) {
       const endpoint = BASE_URL + "/subjects/" + subject_id + "/descriptions/";
       try {
@@ -82,10 +80,11 @@ const TextArea = ({ subject }) => {
         console.error(error.message);
       }
     }
+    */
     
     const id = subject.subject_id.toString();
     const name = subject.name.toLowerCase().replace(/\s/g, "-");
-    await setDoc(doc(db, "contextos", name), {
+    await setDoc(doc(db, "contextos", id), {
       subject_id: id,
       contexto: content,
       lastModified: serverTimestamp()

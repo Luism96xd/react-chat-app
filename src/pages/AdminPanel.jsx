@@ -29,7 +29,7 @@ function Panel() {
         <div className="card center">
           <div className="column">
             <TextArea subject={data.subject} />
-            <ListManager subject={data.subject} />
+            {/*<ListManager subject={data.subject} />*/}
           </div>
         </div>
       </div>

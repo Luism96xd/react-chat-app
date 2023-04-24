@@ -14,12 +14,13 @@ const Subjects = () => {
     const [loading, setLoading] = useState(true);
     const [subjects, setSubjects] = useState([]);
     const { data, dispatch } = useContext(SubjectContext);
-    
+
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
         const getSubjects = async () => {
             setLoading(true);
+            /*
             try {
                 const endpoint = BASE_URL + '/subjects/';
                 console.log(endpoint)
@@ -29,20 +30,30 @@ const Subjects = () => {
             } catch (error) {
                 console.error(error.message);
             }
-            setLoading(false);
-
-            /*
-            const items = [];
-            console.log("Fetching Subjects from database");
-            const q = query(collection(db, "topicos"));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                items.push(doc.data());
-            });
             */
-            //setSubjects(items);
+            const items = [];
+            const cachedData = sessionStorage.getItem('temas');
+            if (cachedData) {
+                console.log("Using cached data");
+                setSubjects(JSON.parse(cachedData));
+                setLoading(false)
+                return Promise.resolve(JSON.parse(cachedData));
+            } else {
+                console.log("Fetching Subjects from database");
+                const q = query(collection(db, "topicos"));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    items.push(doc.data());
+                });
+                setSubjects(items);
+                console.log('Saving it into cache')
+                sessionStorage.setItem('temas', JSON.stringify(items));
+                setLoading(false);
+            }
         }
-        getSubjects();
+        return () => {
+            getSubjects();
+        }
     }, [])
 
     const handleSelect = (subject) => {
@@ -53,19 +64,19 @@ const Subjects = () => {
         dispatch({ type: "CHANGE_SUBJECT", payload: {} });
         setIsOpen(true);
     }
-
+    console.log(subjects);
     return (
         <div className="sidebar">
             <ul className="list">
                 {loading && <div>Loading...</div>}
                 {!loading && (
-                    Object.entries(subjects)?.sort((a, b) => b[1].creation_date - a[1].creation_date)
+                    subjects.sort((a, b) => b.creation_date - a.creation_date)
                         .map((subject) => {
                             return (
                                 <li className="list-item"
-                                    key={subject[1].subject_id}
-                                    onClick={() => handleSelect(subject[1])}>
-                                    <span>{subject[1].name}</span>
+                                    key={subject.subject_id}
+                                    onClick={() => handleSelect(subject)}>
+                                    <span>{subject.name}</span>
                                     <div className="icons">
                                         <img className="icon" src={Edit} alt="edit" onClick={() => setIsOpen(true)} />
                                         <img className="icon" src={Delete} alt="delete" onClick={() => setIsOpen(true)} />
