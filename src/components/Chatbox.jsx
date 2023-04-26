@@ -3,7 +3,7 @@ import Send from "../img/send.svg";
 import { uuidv4 } from '@firebase/util';
 import axios from 'axios';
 import { db } from "../firebase";
-import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 import { AuthContext } from '../context/AuthContext';
 
 const Chatbox = ({ data }) => {
