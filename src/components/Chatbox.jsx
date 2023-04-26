@@ -16,27 +16,39 @@ const Chatbox = ({ data }) => {
         if (text !== null || text !== undefined) {
             const response = await axios.post(BASE_URL + '/api/predict', { text: text });
             console.log(response.data);
-            const data = new Uint8Array(response.data.audio.data);
+            const audio = new Uint8Array(response.data.audio.data);
 
-            await updateDoc(doc(db, "mensajes", currentUser.uid), {
+            const userData = {
                 messages: arrayUnion({
                     id: uuidv4(),
                     text: text,
                     senderId: currentUser.uid,
                     date: Timestamp.now(),
                 })
-            });
+            }
 
-            await updateDoc(doc(db, "mensajes", currentUser.uid), {
+            const botData = {
                 messages: arrayUnion({
                     id: uuidv4(),
                     text: response.data.text,
                     senderId: 'bot',
                     date: Timestamp.now(),
                 })
-            });
+            }
 
-            playOutput(data)
+            // Check whether the document exists
+            const docRef = doc(db, "mensajes", currentUser.uid);
+            const docSnap = await getDoc(docRef);
+
+            // If the document doesn't exist yet, save the data using setDoc
+            if (!docSnap.exists()) {
+                await setDoc(docRef, userData);
+                await setDoc(docRef, botData);
+            }else{
+                await updateDoc(docRef, userData);
+                await updateDoc(docRef, userData);
+            }
+            playOutput(audio)
         }
         setText("");
     }
