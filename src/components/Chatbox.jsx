@@ -43,10 +43,10 @@ const Chatbox = ({ data }) => {
             // If the document doesn't exist yet, save the data using setDoc
             if (!docSnap.exists()) {
                 await setDoc(docRef, userData);
-                await setDoc(docRef, botData);
+                await updateDoc(docRef, botData);
             }else{
                 await updateDoc(docRef, userData);
-                await updateDoc(docRef, userData);
+                await updateDoc(docRef, botData);
             }
             playOutput(audio)
         }
