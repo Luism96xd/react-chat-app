@@ -1,12 +1,12 @@
 import Edit from '../img/edit.svg';
 import Delete from '../img/delete.svg';
 import React, { useContext, useState, useEffect } from "react";
-import axios from 'axios';
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../firebase";
 import { SubjectContext } from "../context/SubjectContext";
 import { Modal } from "./Modal";
 import { AddSubject } from "../components/AddSubject";
+import SubjectAPI from '../api/SubjectsAPI';
 
 
 const Subjects = () => {
@@ -15,21 +15,14 @@ const Subjects = () => {
     const [subjects, setSubjects] = useState([]);
     const { data, dispatch } = useContext(SubjectContext);
 
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
-
     useEffect(() => {
         const getSubjects = async () => {
             setLoading(true);
             /*
-            try {
-                const endpoint = BASE_URL + '/subjects/';
-                console.log(endpoint)
-                const response = await axios.get(endpoint);
-                setSubjects(response.data);
+            SubjectAPI.getAll().then((response) => {
                 console.log(response.data)
-            } catch (error) {
-                console.error(error.message);
-            }
+                setSubjects(response.data);
+            });
             */
             const items = [];
             const cachedData = sessionStorage.getItem('temas');

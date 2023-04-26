@@ -52,11 +52,12 @@ function Register() {
                 uid: user.uid,
                 displayName: displayName,
                 email: email,
-                photoURL: downloadURL
+                photoURL: downloadURL,
+                isAdmin: true
               });
 
               await setDoc(doc(db, "userChats", user.uid), {});
-              navigate("/");
+              navigate("/admin");
             
             });
           
