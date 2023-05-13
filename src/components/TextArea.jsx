@@ -59,7 +59,8 @@ const TextArea = ({ subject }) => {
     getData();
   }, [subject_id]);
 
-  const handleSend = async () => {
+  const handleSend = async (e) => {
+    e.preventDefault();
     /*
     if (subject_id !== null && subject_id !== undefined) {
       const endpoint = BASE_URL + "/subjects/" + subject_id + "/descriptions/";
@@ -81,7 +82,7 @@ const TextArea = ({ subject }) => {
       }
     }
     */
-    
+
     const id = subject.subject_id.toString();
     const name = subject.name.toLowerCase().replace(/\s/g, "-");
     await setDoc(doc(db, "contextos", id), {
@@ -89,22 +90,20 @@ const TextArea = ({ subject }) => {
       contexto: content,
       lastModified: serverTimestamp()
     });
-    
+
   }
 
   return (
     <div className='workspace'>
       {
         subject_id &&
-        <div>
+        <form onSubmit={handleSend}>
           <h2>{(subject.subject_id) ? subject.name : "Configurar respuestas"}</h2>
-          <form action="">
-            <ReactQuill className='textarea' onChange={value => setContent(value)} theme="snow" value={content}/>
-          </form>
+          <ReactQuill className='textarea' onChange={value => setContent(value)} theme="snow" value={content} />
           <div>
-            <button onClick={handleSend} className="btn btn-primary">Actualizar Respuestas</button>
+            <button type="submit" className="btn btn-primary">Actualizar Respuestas</button>
           </div>
-        </div>
+        </form>
       }
     </div>
   )

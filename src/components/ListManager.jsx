@@ -67,6 +67,7 @@ const ListManager = ({ subject }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(inputFields);
+        /*
         let endpoint = BASE_URL + "/subjects/" + subject.subject_id + "/questions/";
         try {
             inputFields.forEach(async (object) => {
@@ -99,41 +100,41 @@ const ListManager = ({ subject }) => {
             console.log(error);
         }
 
+        */
     }
 
     return (
         <div style={{ width: '100%' }}>
             {
                 subject.subject_id &&
-                <div>
+                <form onSubmit={handleSubmit}>
                     <h2 title={'Preguntas frecuentes relacionadas con ' + subject.name}>Preguntas</h2>
-                    <form action="">
-                        {
-                            inputFields.map((input, index) => {
-                                return (
-                                    <div key={index} className='flex question-row'>
-                                        <input type="text"
-                                            defaultValue={questions[index]?.question}
-                                            onChange={event => handleFormChange(index, event)}
-                                            name="question"
-                                        />
-                                        <div className='flex'>
-                                            <button onClick={addFields}>
-                                                <img src={Add} alt="Añadir una nueva pregunta" />
-                                            </button>
-                                            <button onClick={(e) => removeFields(e, index)}>
-                                                <img src={Delete} alt="Borrar pregunta" />
-                                            </button>
-                                        </div>
+                    {
+                        inputFields.map((input, index) => {
+                            return (
+                                <div key={index} className='flex question-row'>
+                                    <input type="text"
+                                        defaultValue={questions[index]?.question}
+                                        onChange={event => handleFormChange(index, event)}
+                                        name="question"
+                                    />
+                                    <div className='flex'>
+                                        <button onClick={addFields}>
+                                            <img src={Add} alt="Añadir una nueva pregunta" />
+                                        </button>
+                                        <button onClick={(e) => removeFields(e, index)}>
+                                            <img src={Delete} alt="Borrar pregunta" />
+                                        </button>
                                     </div>
-                                )
-                            })
-                        }
-                    </form>
+                                </div>
+                            )
+                        })
+                    }
+
                     <div>
-                        <button onClick={handleSubmit} className="btn btn-primary">Actualizar Preguntas</button>
+                        <button type='submit' className="btn btn-primary">Actualizar Preguntas</button>
                     </div>
-                </div>
+                </form>
             }
         </div>
     )

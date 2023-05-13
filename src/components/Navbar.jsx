@@ -14,6 +14,7 @@ const Navbar = () => {
                 <li className="list-item"><Link to="/news">Noticias</Link></li>
                 <li className="list-item"><Link to="/tickets">Casos</Link></li>
                 <li className="list-item"><Link to="/chat">Chat</Link></li>
+                <li className="list-item"><Link to="/general">Contacto</Link></li>
             </ul>
         </nav>
     </header>

@@ -50,12 +50,12 @@
         }
     }
 
-    .form{
+    form{
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        padding: 32px;
+        margin: 16px auto;
     }
+
     .form-inline{
         display: grid;
         grid-template-columns: minmax(100px, 1fr) 2fr;
@@ -71,11 +71,11 @@
     .question-row{
         display: flex;
         align-items: center;
-        padding: 0 32px;
         width: 100%;
-        margin-top: 16px;
-        margin-bottom: 32px;
-        max-height: 32px;
+        gap: 16px;
+        padding: 0px 32px;
+        margin: 16px auto;
+        
         input{
             width: 100%;
         }
@@ -87,8 +87,8 @@
             cursor: pointer;
 
             img{
-                width: 80%;
-                height: 80%;
+                width: 90%;
+                height: 90%;
             }
         }
     }
@@ -157,10 +157,6 @@
         align-items: center;
         height: 100%;
         font-family: 'Poppins', sans-serif;
-
-        h2{
-            margin-bottom: 8px;
-        }
 
         textarea{
             padding: 24px;

@@ -13,6 +13,7 @@ import NewsPanel from './pages/NewsPanel';
 import { Example } from './pages/example';
 import TicketsPage from './pages/TicketsPage';
 import ChatPage from './pages/ChatPage';
+import GeneralPanel from './pages/GeneralPanel';
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -49,6 +50,7 @@ function App() {
           <Route path="/news" element={<NewsPanel />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/tickets" element={<TicketsPage />} />
+          <Route path="/general" element={<GeneralPanel />} />
         </Routes>
       </Router>
     </div>
