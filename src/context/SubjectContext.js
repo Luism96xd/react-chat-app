@@ -6,7 +6,7 @@ export const SubjectContextProvider = ({ children }) => {
 
     const INITIAL_STATE = {
         subject: {
-            subject_id: null,
+            subject_id: 1,
             name: ""
         }
     }

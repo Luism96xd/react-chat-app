@@ -14,7 +14,7 @@ const TextArea = ({ subject }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const { data } = useContext(SubjectContext);
-  const { subject_id } = data.subject;
+  const { subject_id, name } = data.subject;
 
   /*
   useEffect(() => {
@@ -84,9 +84,10 @@ const TextArea = ({ subject }) => {
     */
 
     const id = subject.subject_id.toString();
-    const name = subject.name.toLowerCase().replace(/\s/g, "-");
+    const subjectName = name.toLowerCase().replace(/\s/g, "-");
     await setDoc(doc(db, "contextos", id), {
       subject_id: id,
+      name: subjectName,
       contexto: content,
       lastModified: serverTimestamp()
     });
