@@ -57,7 +57,7 @@ function Register() {
               });
 
               await setDoc(doc(db, "userChats", user.uid), {});
-              navigate("/admin");
+              navigate("/chat");
             
             });
           

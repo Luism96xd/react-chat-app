@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     const unsuscribe = () => {
-      if(currentUser){
+      if (currentUser) {
         requestPermission(currentUser);
       }
     }
@@ -46,11 +46,23 @@ function App() {
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminPanel />
+            </ProtectedRoute>
+          } />
+          <Route path="/chat" element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          } />
           <Route path="/news" element={<NewsPanel />} />
           <Route path="/tickets" element={<TicketsPage />} />
-          <Route path="/general" element={<GeneralPanel />} />
+          <Route path="/general" element={
+            <ProtectedRoute>
+              <GeneralPanel />
+            </ProtectedRoute>
+          } />
         </Routes>
       </Router>
     </div>
