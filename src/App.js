@@ -47,6 +47,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route path="/news" element={<NewsPanel />} />
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/general" element={<GeneralPanel />} />
