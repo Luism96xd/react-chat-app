@@ -17,13 +17,8 @@ function Login() {
         const userCredentials = await signInWithEmailAndPassword(auth, email, password);
         const id = userCredentials.user.uid;
         const docSnap = await getDoc(doc(db, "users", id));
-        const isAdmin = docSnap.data().isAdmin;
 
-        if (docSnap.exists() && isAdmin) {
-          navigate("/admin");
-        } else {
-          navigate("/");
-        }
+        navigate("/chat");
 
       }catch(error){
         setError(true);
