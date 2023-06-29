@@ -1,3 +1,8 @@
+$text-gray:#6e6f71;
+$bg-blue: #1e70ce;
+$bg-dark-blue: #2954cd;
+$bg-purple: #5b75fc;
+
 * {
     box-sizing: border-box;
 }
@@ -36,7 +41,8 @@ body {
 
 .chatlogs .msg.me {
     text-align: left;
-    background-color: #daeffa;
+    background-color: #f4f4f4;
+    color: black;
     border-radius: 10px 10px 0 10px;
     padding: 10px 24px;
     margin-left: auto;
@@ -45,7 +51,8 @@ body {
 
 .chatlogs .msg.bot {
     text-align: left;
-    background-color: #f5f5f5;
+    background-color: $bg-purple;
+    color: white;
     border-radius: 0px 10px 10px 10px;
     padding: 10px 24px;
     margin-right: auto;
@@ -76,7 +83,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #697ec4;
+    background-color: $bg-blue;
     border: none;
     outline: none;
     position: relative;
@@ -88,4 +95,17 @@ body {
     color: #fff;
     width: 70%;
     height: 70%;                
+}
+
+.chatbox .chatinput .mic {
+    color: $text-gray;
+}
+
+.recording{
+    padding: 1em;
+    background-color: #f41111;
+    border: 2px solid black;
+}
+.hidden{
+    display: none;
 }

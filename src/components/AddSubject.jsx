@@ -108,7 +108,8 @@ export const AddSubject = ({ id, setIsOpen }) => {
     const createIntent = async (name, inputFields) => {
         //Crear un nuevo intent de Dialogflow
         let phrases = inputFields.map(row => row.question);
-        await axios.post(BASE_URL + "/intents/", {
+    
+        await axios.post(BASE_URL + "/api/intents/", {
             displayName: name,
             trainingPhrasesParts: phrases,
             messageTexts: ["Tu consulta será resuelta a la brevedad posible"]

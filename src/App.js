@@ -41,14 +41,13 @@ function App() {
         <Routes path="/">
           <Route index element={
             <ProtectedRoute>
-              <Home />
+              <ChatPage />
             </ProtectedRoute>
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/news" element={<NewsPanel />} />
-          <Route path="/chat" element={<ChatPage />} />
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/general" element={<GeneralPanel />} />
         </Routes>

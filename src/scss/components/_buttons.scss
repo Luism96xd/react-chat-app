@@ -9,6 +9,7 @@
 }
 .btn:hover{
     cursor: pointer;
+    background-image: linear-gradient(rgb(0, 0, 0, 5%) 0, 0);
 }
 .btn.btn-default{
     background-color: #1b1b1b;
@@ -25,4 +26,30 @@
 .btn.btn-success{
     background-color: #23a74a;
     color: white;
+}
+
+.rounded-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    border: none;
+    gap: 6px;
+    cursor: pointer;
+    color:  white;
+    font-weight: 450;
+    font-size: inherit;
+    text-align: center;
+    padding: 0.5em;
+    margin: 0;
+    border-radius: 1.5em;
+}
+.w-6{
+    width: 1.5em;
+}
+.h-6{
+    height: 1.5em;
+}
+.rounded-btn:hover{
+    background-image: linear-gradient(rgb(0, 0, 0, 5%) 0, 0);
 }
