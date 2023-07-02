@@ -46,38 +46,43 @@ const Chatbox = ({ data }) => {
             console.log("getUserMedia is not supported.");
             return;
         }
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        const recorder = RecordRTC(stream, {
-            type: 'audio',
-            mimeType: 'audio/webm',
-            sampleRate: 44100, // this sampleRate should be the same in your server code
-            recorderType: StereoAudioRecorder,
-            // Dialogflow / STT requires mono audio
-            numberOfAudioChannels: 1,
-            timeSlice: 1000,
-            // let us force 16khz recording:
-            desiredSampRate: 16000,
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+            const recorder = RecordRTC(stream, {
+                type: 'audio',
+                mimeType: 'audio/webm',
+                sampleRate: 44100, // this sampleRate should be the same in your server code
+                recorderType: StereoAudioRecorder,
+                // Dialogflow / STT requires mono audio
+                numberOfAudioChannels: 1,
+                timeSlice: 1000,
+                // let us force 16khz recording:
+                desiredSampRate: 16000,
 
-        });
-        if (recorder == undefined) {
+            });
+            if (recorder == undefined) {
+                return;
+            }
+            recorder.startRecording();
+            setIsRecording(true);
+
+            setTimeout(() => {
+                recorder.stopRecording(async () => {
+                    setBlob(null);
+                    const audioBlob = await recorder.getBlob();
+                    setBlob(audioBlob);
+                    recorder.reset();
+                    console.log(audioBlob)
+                    if (audioBlob != undefined) {
+                        handleSaveAudio(blob);
+                    }
+                });
+                setIsRecording(false);
+            }, 4000);
+        } catch (error) {
+            console.log("getUserMedia error:", error);
             return;
         }
-        recorder.startRecording();
-        setIsRecording(true);
-
-        setTimeout(() => {
-            recorder.stopRecording(async () => {
-                setBlob(null);
-                const audioBlob = await recorder.getBlob();
-                setBlob(audioBlob);
-                recorder.reset();
-                console.log(blob)
-                if (blob != undefined) {
-                    handleSaveAudio(blob);
-                }
-            });
-            setIsRecording(false);
-        }, 3000);
     }
 
     const convertToBase64 = (blob) => {
