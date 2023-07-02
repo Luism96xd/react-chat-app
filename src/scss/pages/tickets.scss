@@ -1,6 +1,5 @@
 @import '../components/buttons';
 @import '../components/ripples';
-@import '../components/navigation';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
 *{
     margin: 0;
@@ -44,6 +43,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     font-family: 'Inter', sans-serif;
+
+    @include mobile() {
+        max-height: 180px;
+    }
 }
 
 .ticket-card{

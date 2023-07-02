@@ -4,138 +4,145 @@ import axios from 'axios';
 import { db } from "../firebase";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 import { AuthContext } from '../context/AuthContext';
+import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 
 const Chatbox = ({ data }) => {
     const [text, setText] = useState("");
-    const { currentUser } = useContext(AuthContext);
+    const [includeAudio, setIncludeAudio] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [audioChunks, setAudioChunks] = useState([]);
     const mediaRecorder = useRef(null);
+    const { currentUser } = useContext(AuthContext);
+    const bottomEl = useRef(null);
+    const [blob, setBlob] = useState();
 
+    const scrollToBottom = () => {
+        bottomEl?.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const handleSend = async () => {
         if (text !== null || text !== undefined) {
-            const response = await axios.post(BASE_URL + '/api/predict', { text: text });
-            console.log(response.data);
-            const audio = new Uint8Array(response.data.audio.data);
-
-            const userData = {
-                messages: arrayUnion({
-                    id: uuidv4(),
-                    text: text,
-                    senderId: currentUser.uid,
-                    date: Timestamp.now(),
-                })
+            const request = {
+                text: text
             }
-
-            const botData = {
-                messages: arrayUnion({
-                    id: uuidv4(),
-                    text: response.data.text,
-                    senderId: 'bot',
-                    date: Timestamp.now(),
-                })
+            if (includeAudio) {
+                request.includeAudio = includeAudio;
             }
-
-            // Check whether the document exists
-            const docRef = doc(db, "mensajes", currentUser.uid);
-            const docSnap = await getDoc(docRef);
-
-            // If the document doesn't exist yet, save the data using setDoc
-            if (!docSnap.exists()) {
-                await setDoc(docRef, userData);
-                await updateDoc(docRef, botData);
-            } else {
-                await updateDoc(docRef, userData);
-                await updateDoc(docRef, botData);
+            const response = await axios.post(BASE_URL + '/api/predict', {
+                request: request,
+                uid: currentUser.uid
+            });
+            handleSaveMessage(text, response.data.text);
+            if (includeAudio) {
+                playOutput(response.data.audio);
             }
-            playOutput(audio)
         }
         setText("");
     }
-
     const recognizeSpeech = async () => {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             console.log("getUserMedia is not supported.");
             return;
         }
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const media = new MediaRecorder(stream);
-        mediaRecorder.current = media;
-        console.log("isRecording: ", isRecording);
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        const recorder = RecordRTC(stream, {
+            type: 'audio',
+            mimeType: 'audio/webm',
+            sampleRate: 44100, // this sampleRate should be the same in your server code
+            recorderType: StereoAudioRecorder,
+            // Dialogflow / STT requires mono audio
+            numberOfAudioChannels: 1,
+            timeSlice: 1000,
+            // let us force 16khz recording:
+            desiredSampRate: 16000,
 
-        if (!isRecording) {
-            mediaRecorder.current.start()
-            console.log(mediaRecorder.state);
-            mediaRecorder.current.ondataavailable = handleDataAvailable;
-            setIsRecording(true);
-        } else {
-            mediaRecorder.current.stop();
-            console.log(mediaRecorder.state);
-            console.log("recorder stopped");
-            console.log(audioChunks);
+        });
+        if (recorder == undefined) {
+            return;
+        }
+        recorder.startRecording();
+        setIsRecording(true);
+
+        setTimeout(() => {
+            recorder.stopRecording(async () => {
+                setBlob(null);
+                const audioBlob = await recorder.getBlob();
+                setBlob(audioBlob);
+                recorder.reset();
+                console.log(blob)
+                if (blob != undefined) {
+                    handleSaveAudio(blob);
+                }
+            });
             setIsRecording(false);
-            mediaRecorder.current.onstop = handleAudioStop;
-
-            if (mediaRecorder.state === 'inactive') {
-                const audioInput = new Blob(audioChunks, { type: "audio/ogg; codecs=opus" });
-                console.log(audioInput)
-                //const audioInput64 = convertToBase64AndSend(audioInput);
-                console.log("audio: ")
-                const audioInput64 = btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(audioInput))));
-                console.log(audioInput64);
-
-                const response = await axios.post(BASE_URL + '/api/speech', { audioInput: audioInput64 })
-                console.log(response.data);
-                setAudioChunks([]);
-            }
-        }
-    }
-    const handleDataAvailable = (e) => {
-        console.log("handleDataAvailable");
-        if (e.data.size > 0) {
-            setAudioChunks((prev) => [...prev, e.data]);
-        }
-    }
-    const handleAudioStop = (e) => {
-        console.log("handleAudioStop");
-        if (audioChunks) {
-            if (audioChunks.length > 0) {
-                const audio = document.createElement('audio');
-                audio.controls = true;
-                const blob = new Blob(audioChunks, { 'type': 'audio/ogg; codecs=opus' });
-                const audioURL = window.URL.createObjectURL(blob);
-                audio.src = audioURL;
-                audio.play();
-            }
-        }
+        }, 3000);
     }
 
-    const convertToBase64AndSend = (audioBlob) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(audioBlob);
-        reader.onloadend = () => {
-            const base64data = reader.result;
-            return base64data;
-        }
+    const convertToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64 = reader.result.split(",")[1];
+                resolve(base64);
+            };
+            reader.onerror = () => {
+                reject(reader.error);
+            };
+            reader.readAsDataURL(blob);
+        });
     }
-
+    const handleSaveAudio = async (blob) => {
+        const audioBase64 = await convertToBase64(blob);
+        const response = await axios.post(BASE_URL + '/api/speech', { audioInput: audioBase64 });
+        console.log(response.data)
+        handleSaveMessage(response?.data?.query, response?.data?.text);
+        setAudioChunks(null);
+    };
     const handleKey = (e) => {
         if (e.code === "Enter") {
             console.log("enter");
             handleSend();
         };
     }
+    const handleSaveMessage = async (userMessage, botMessage) => {
+        const userData = {
+            messages: arrayUnion({
+                id: uuidv4(),
+                text: userMessage,
+                senderId: currentUser.uid,
+                date: Timestamp.now(),
+            })
+        }
 
+        const botData = {
+            messages: arrayUnion({
+                id: uuidv4(),
+                text: botMessage,
+                senderId: 'bot',
+                date: Timestamp.now(),
+            })
+        }
+        // Check whether the document exists
+        const docRef = doc(db, "mensajes", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+
+        // If the document doesn't exist yet, save the data using setDoc
+        if (!docSnap.exists()) {
+            await setDoc(docRef, userData);
+            await updateDoc(docRef, botData);
+        } else {
+            await updateDoc(docRef, userData);
+            await updateDoc(docRef, botData);
+        }
+        scrollToBottom();
+    }
     const playOutput = (audioBuffer) => {
+        const audio = new Uint8Array(audioBuffer.data);
         let audioContext = new AudioContext();
         let outputSource;
-        const arrayBuffer = audioBuffer.buffer;
-        //console.log(arrayBuffer);
-        //console.log(arrayBuffer.byteLength);
-        //console.log(typeof (arrayBuffer))
+        const arrayBuffer = audio.buffer;
         try {
             if (arrayBuffer.byteLength > 0) {
                 audioContext.decodeAudioData(arrayBuffer,
@@ -167,8 +174,22 @@ const Chatbox = ({ data }) => {
                         <p>{item.text}</p>
                     </div>
                 ))}
+                <div ref={bottomEl}></div>
             </div>
             <div className="chatinput">
+                <button className='rounded-btn text-gray' onClick={() => setIncludeAudio(!includeAudio)}>
+                    {
+                        (includeAudio) ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                            </svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.531V19.94a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
+                            </svg>
+                        )
+                    }
+                </button>
                 <input
                     type="text"
                     value={text}
@@ -176,7 +197,7 @@ const Chatbox = ({ data }) => {
                     onChange={(e) => setText(e.target.value)}
                     onKeyDown={handleKey}
                 />
-                <button className={`mic rounded-btn ${isRecording ? 'recording' : ""}`} onClick={recognizeSpeech}>
+                <button className={`rounded-btn text-gray ${isRecording ? 'recording' : ""}`} onClick={recognizeSpeech}>
                     <svg xmlns="http://www.w3.org/2000/svg" aria-label="Record audio input" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`w-6 h-6 ${isRecording ? 'hidden' : ""}`}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
                     </svg>
