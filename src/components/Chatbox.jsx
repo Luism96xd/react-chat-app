@@ -6,12 +6,11 @@ import { doc, getDoc, setDoc, updateDoc, arrayUnion, Timestamp } from "firebase/
 import { AuthContext } from '../context/AuthContext';
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 
-const Chatbox = ({ data }) => {
+const Chatbox = ({ data, model }) => {
     const [text, setText] = useState("");
     const [includeAudio, setIncludeAudio] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [audioChunks, setAudioChunks] = useState([]);
-    const mediaRecorder = useRef(null);
     const { currentUser } = useContext(AuthContext);
     const bottomEl = useRef(null);
     const [blob, setBlob] = useState();
@@ -32,7 +31,8 @@ const Chatbox = ({ data }) => {
             }
             const response = await axios.post(BASE_URL + '/api/predict', {
                 request: request,
-                uid: currentUser.uid
+                uid: currentUser.uid,
+                model: model
             });
             handleSaveMessage(text, response.data.text);
             if (includeAudio) {
@@ -60,21 +60,21 @@ const Chatbox = ({ data }) => {
                 desiredSampRate: 16000,
 
             });
-            if (recorder == undefined) {
+            if (recorder === undefined) {
                 return;
             }
-            recorder.startRecording();
+            await recorder.startRecording();
             setIsRecording(true);
 
-            setTimeout(() => {
-                recorder.stopRecording(async () => {
+            setTimeout(async () => {
+                await recorder.stopRecording(async () => {
                     setBlob(null);
                     const audioBlob = await recorder.getBlob();
                     setBlob(audioBlob);
-                    recorder.reset();
+                    await recorder.reset();
                     console.log(audioBlob)
-                    if (audioBlob != undefined) {
-                        handleSaveAudio(blob);
+                    if (audioBlob !== undefined) {
+                        handleSaveAudio(audioBlob);
                     }
                 });
                 setIsRecording(false);
@@ -84,7 +84,6 @@ const Chatbox = ({ data }) => {
             return;
         }
     }
-
     const convertToBase64 = (blob) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();

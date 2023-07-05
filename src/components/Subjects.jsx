@@ -44,7 +44,6 @@ const Subjects = () => {
                 setLoading(false);
             }
         }
-        console.log(subjects);
         getSubjects();
     }, [])
 
@@ -67,7 +66,7 @@ const Subjects = () => {
                                 <li className="list-item"
                                     key={subject.subject_id}
                                     onClick={() => handleSelect(subject)}>
-                                    <span>{subject.name}</span>
+                                    <span>{subject.displayName}</span>
                                     <div className="icons">
                                         <img className="icon" src={Edit} alt="edit" onClick={() => setIsOpen(true)} />
                                         <img className="icon" src={Delete} alt="delete" onClick={() => setIsOpen(true)} />

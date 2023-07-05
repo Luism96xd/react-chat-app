@@ -10,6 +10,7 @@ import '../scss/components/_chat.scss';
 
 const ChatPage = () => {
     const [loading, setLoading] = useState(false);
+    const [model, setModel] = useState('ChatSonic');
     const [chats, setChats] = useState([]);
     const { currentUser } = useContext(AuthContext);
 
@@ -30,17 +31,21 @@ const ChatPage = () => {
     }, [currentUser.uid]);
 
 
-    const data = [{'name': 'Luis'}, {'name': 'Jane'}, {'name': 'John'}]
-   
+    const data = [{ 'name': 'ChatSonic' }, { 'name': 'Bloom' }, { 'name': 'Falcon' }, { 'name': 'A21Labs' }];
+
+    const handleOnModelChange = (e) => {
+        setModel(e.target.value);
+    }
+
     const renderList = (data) => {
         return (
-            <ul>
+            <select className='input' onChange={handleOnModelChange}>
                 {data.map((item, index) => (
-                    <div key={index}>
+                    <option key={index} value={item.name}>
                         <p>{item.name}</p>
-                    </div>
+                    </option>
                 ))}
-            </ul>
+            </select>
         );
     };
 
@@ -50,8 +55,9 @@ const ChatPage = () => {
             <div className="grid">
                 <aside className='list-container'>
                     <FilterableList data={data} field={'name'} renderList={renderList} />
+                    {model}
                 </aside>
-                <Chatbox data={chats} />
+                <Chatbox data={chats} model={model} />
             </div>
         </div>
     )

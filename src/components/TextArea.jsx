@@ -14,7 +14,7 @@ const TextArea = ({ subject }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const { data } = useContext(SubjectContext);
-  const { subject_id, name } = data.subject;
+  const { subject_id, displayName } = data.subject;
 
   /*
   useEffect(() => {
@@ -38,19 +38,15 @@ const TextArea = ({ subject }) => {
   */
   useEffect(() => {
     const getData = async () => {
-      let id = subject.subject_id;
       //let name = subject.name.toLowerCase().replace(" ", "-");
-      if (id !== null) {
+      if (subject_id !== undefined) {
         console.log("Fetching data from database");
-        const ref = doc(db, "contextos", id);
+        const ref = doc(db, "contextos", subject_id.toString());
         const docSnap = await getDoc(ref);
-
         if (docSnap.exists()) {
           const data = docSnap.data();
-          console.log(data);
-          setTitle(subject.name);
+          setTitle(displayName);
           setContent(data.contexto);
-
         } else {
           console.log("No such document!");
         }
@@ -83,8 +79,8 @@ const TextArea = ({ subject }) => {
     }
     */
 
-    const id = subject.subject_id.toString();
-    const subjectName = name.toLowerCase().replace(/\s/g, "-");
+    const id = subject_id.toString();
+    const subjectName = displayName.toLowerCase().replace(/\s/g, "-");
     await setDoc(doc(db, "contextos", id), {
       subject_id: id,
       name: subjectName,
@@ -99,7 +95,7 @@ const TextArea = ({ subject }) => {
       {
         subject_id &&
         <form onSubmit={handleSend}>
-          <h2>{(subject.subject_id) ? subject.name : "Configurar respuestas"}</h2>
+          <h2>{(subject.subject_id) ? subject.displayName : "Configurar respuestas"}</h2>
           <ReactQuill className='textarea' onChange={value => setContent(value)} theme="snow" value={content} />
           <div>
             <button type="submit" className="btn btn-primary">Actualizar Respuestas</button>
