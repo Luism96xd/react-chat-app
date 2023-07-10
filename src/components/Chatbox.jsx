@@ -78,7 +78,7 @@ const Chatbox = ({ data, model }) => {
                     }
                 });
                 setIsRecording(false);
-            }, 4000);
+            }, 5000);
         } catch (error) {
             console.log("getUserMedia error:", error);
             return;
