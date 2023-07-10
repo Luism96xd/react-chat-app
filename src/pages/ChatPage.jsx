@@ -17,7 +17,6 @@ const ChatPage = () => {
     useEffect(() => {
         const getChats = () => {
             setLoading(true);
-            console.log(currentUser.uid)
             const unsub = onSnapshot(doc(db, "mensajes", currentUser.uid), (doc) => {
                 setChats(doc.data().messages);
             });

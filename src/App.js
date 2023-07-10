@@ -24,7 +24,7 @@ function App() {
         requestPermission(currentUser);
       }
     }
-    unsuscribe()
+    unsuscribe();
   }, [currentUser]);
 
   const ProtectedRoute = ({ children }) => {

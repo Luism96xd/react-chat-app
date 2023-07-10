@@ -25,6 +25,8 @@ export const requestPermission = async (currentUser) => {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
         console.log('Notification permission granted.');
-        getFCMToken(currentUser);
+        if(currentUser.uid){
+            getFCMToken(currentUser);
+        }
     }
 }
