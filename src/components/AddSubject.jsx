@@ -93,7 +93,7 @@ export const AddSubject = ({ id, setIsOpen }) => {
             const res = await addDoc(collection(db, "topicos"), {
                 name: name.toLowerCase().replace(/\s/g, "-"),
                 displayName: name,
-                creation_date: new Date().toISOString()
+                creation_date: new Date.now().toISOString().slice(0, 19).replace('T', ' '),
             });
             await updateDoc(doc(db, "topicos", res.id), {
                 subject_id: res.id,

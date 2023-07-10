@@ -99,9 +99,22 @@ const Chatbox = ({ data, model }) => {
     }
     const handleSaveAudio = async (blob) => {
         const audioBase64 = await convertToBase64(blob);
-        const response = await axios.post(BASE_URL + '/api/speech', { audioInput: audioBase64 });
+        const request = {
+            audioInput: audioBase64,
+        }
+        if (includeAudio) {
+            request.includeAudio = includeAudio;
+        }
+        const response = await axios.post(BASE_URL + '/api/speech', { 
+            request: request,
+            uid: currentUser.uid,
+            model: model,
+        });
         console.log(response.data)
         handleSaveMessage(response?.data?.query, response?.data?.text);
+        if (includeAudio) {
+            playOutput(response.data.audio);
+        }
         setAudioChunks(null);
     };
     const handleKey = (e) => {
