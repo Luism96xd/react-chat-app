@@ -30,7 +30,7 @@ const ChatPage = () => {
     }, [currentUser.uid]);
 
 
-    const data = [{'name': 'BotSonic'}, { 'name': 'ChatSonic' }, { 'name': 'Bloom' }, { 'name': 'Falcon' }, { 'name': 'A21Labs' }];
+    const data = [{ 'name': 'Palm' } ,{'name': 'BotSonic'}, { 'name': 'ChatSonic' }, { 'name': 'Bloom' }, { 'name': 'Falcon' }, { 'name': 'A21Labs' }];
 
     const handleOnModelChange = (e) => {
         setModel(e.target.value);
