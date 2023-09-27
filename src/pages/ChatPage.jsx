@@ -10,7 +10,7 @@ import '../scss/components/_chat.scss';
 
 const ChatPage = () => {
     const [loading, setLoading] = useState(false);
-    const [model, setModel] = useState('BotSonic');
+    const [model, setModel] = useState('Llama2');
     const [chats, setChats] = useState([]);
     const { currentUser } = useContext(AuthContext);
 
@@ -30,7 +30,7 @@ const ChatPage = () => {
     }, [currentUser.uid]);
 
 
-    const data = [{ 'name': 'Palm' } ,{'name': 'BotSonic'}, { 'name': 'ChatSonic' }, { 'name': 'Bloom' }, { 'name': 'Falcon' }, { 'name': 'A21Labs' }];
+    const data = [{ 'name': 'Llama2' }, { 'name': 'Palm' } ,{'name': 'BotSonic'}, { 'name': 'ChatSonic' }, { 'name': 'Bloom' }, { 'name': 'Falcon' }, { 'name': 'A21Labs' }];
 
     const handleOnModelChange = (e) => {
         setModel(e.target.value);
